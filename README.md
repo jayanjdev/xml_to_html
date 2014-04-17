@@ -1,4 +1,4 @@
-# XmlValidator
+# XmlHtmlTransformer
 
 TODO: Write a gem description
 
