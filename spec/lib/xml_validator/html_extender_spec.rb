@@ -10,8 +10,8 @@ describe XmlValidator::HtmlExtender do
 
   describe "#expand" do
     it "returns the inner html" do
-      node = Nokogiri.parse('<b>a</b>')
-      Redbold.new(node).expand.should eql('<b>a</b>')
+      node = Nokogiri.parse('<p class="pi"><i>a1</i><b>a2</b></p>').children.first
+      Redbold.new(node).expand(node).should eql('<p class="pi"><i>a1</i><b>a2</b></p>')
     end
   end
 
@@ -24,12 +24,12 @@ describe XmlValidator::HtmlExtender do
 
     it "returns attributes as string when there is exactly one attribute" do
       node = Nokogiri.parse('<span class="red">xyz</span>').children.first
-      redbold.node_attributes(node).should eql('class="red"')
+      redbold.node_attributes(node).should eql(' class="red"')
     end
 
     it "returns attributes as string when there are more than one attributes" do
       node = Nokogiri.parse('<span class="red" data="rd">xyz</span>').children.first
-      redbold.node_attributes(node).should eql('class="red" data="rd"')
+      redbold.node_attributes(node).should eql(' class="red" data="rd"')
     end
   end
 

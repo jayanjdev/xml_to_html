@@ -8,10 +8,10 @@ module XmlValidator
       @node = node
     end
 
-    def expand 
-      if node.is_a?(Nokogiri::XML::Element)
+    def expand(node) 
+      if node.is_a?(Nokogiri::XML::Element) 
         return node_expand(node)
-      elsif node.is_a?(Nokogiri::XML::NodeSet) || node.is_a?(Array)
+      elsif node.is_a?(Nokogiri::XML::NodeSet)
         return node.inject('') { |str, ele| str + expand(ele) }
       elsif  node.is_a?(Nokogiri::XML::Text)
         return node.to_s
@@ -19,13 +19,15 @@ module XmlValidator
     end
 
     def node_expand(_node)
-      "<#{_node.name} #{node_attributes(_node)}>
-        #{expand(_node.children)}
-      </#{_node.name}>"
+      "<#{_node.name}#{node_attributes(_node)}>#{expand(_node.children)}</#{_node.name}>"
     end
 
     def node_attributes(_node)
-      _node.attributes.collect { |key, val| "#{key}=\"#{val}\""}.join(' ')
+      if _node.attributes.any?
+        _node.attributes.collect { |key, val| " #{key}=\"#{val}\""}.join('')
+      else
+        ''
+      end
     end
 
   end
