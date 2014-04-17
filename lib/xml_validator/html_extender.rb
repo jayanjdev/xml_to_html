@@ -10,9 +10,7 @@ module XmlValidator
 
     def self.convert(tag, opts = {})
       @convert_table ||= {}
-      p "#{self.class} #{self.superclass}------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------"
       @convert_table[tag.to_s] = opts
-      p @convert_table.inspect
     end
 
     def self.in_conversion_table(tag)
