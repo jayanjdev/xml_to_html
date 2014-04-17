@@ -1,6 +1,6 @@
-describe do
-  before do
-    
-  end
+require "spec_helper"
 
+describe XmlValidator do
+  before do
+  end
 end
