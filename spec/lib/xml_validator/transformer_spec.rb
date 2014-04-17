@@ -2,7 +2,10 @@ require "spec_helper"
 
 describe XmlValidator::Transformer do
 
-  describe "#node_attributes" do
+  describe ".element_transform" do
+  end
+
+  describe ".node_attributes" do
     it "returns empty string when there are no attributes" do
       node = Nokogiri.parse('<span>xyz</span>').children.first
       XmlValidator::HtmlExtender.node_attributes(node).should eql('')

@@ -10,11 +10,26 @@ module XmlValidator
       end
     end
 
+    def convert(tag, opts = {})
+      @convert_table ||= {}
+      @convert_table[tag.to_s] = opts
+    end
+
+    def requires_conversion?(tag)
+      @convert_table[tag.to_s]
+    end
+
     def element_transform(_node)
-      if self.in_conversion_table(_node.name)
-        open_tag = self.in_conversion_table(_node.name)[:open]
-        close_tag = self.in_conversion_table(_node.name)[:close]
-        "#{open_tag}#{transform(_node.children)}#{close_tag}"
+      if requires_conversion?(_node.name)
+        if (requires_conversion?(_node.name)[:open] && requires_conversion?(_node.name)[:close])
+          open_tag = requires_conversion?(_node.name)[:open]
+          close_tag = requires_conversion?(_node.name)[:close]
+          "#{open_tag}#{transform(_node.children)}#{close_tag}"
+        elsif requires_conversion?(_node.name)[:lambda]
+          requires_conversion?(_node.name)[:lambda].call(_node)
+        else
+          raise "conversion definition for #{_node.name} is incorrect" 
+        end
       else
         "<#{_node.name}#{node_attributes(_node)}>#{transform(_node.children)}</#{_node.name}>"
       end
